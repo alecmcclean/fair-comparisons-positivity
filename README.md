@@ -1,0 +1,1 @@
+Data analysis for McClean et al. (2024) "Fair comparisons of causal parameters with many treatments and positivity violations"
