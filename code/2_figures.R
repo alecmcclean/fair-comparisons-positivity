@@ -35,14 +35,14 @@ change_name <- data.frame(filename = files,
                                   "Shift: delta = 0.5",
                                   "Tilt: delta = 0.9",
                                   "Tilt: delta = 0.5",
-                                  "Trimmed TSMs"))
+                                  "Smooth trimmed TSMs"))
 
 combined_data %<>% full_join(change_name) %>% select(-filename) 
 combined_data %<>% mutate(spec = factor(spec, levels = c("Shift: delta = 0.9",
                                                          "Shift: delta = 0.5",
                                                          "Tilt: delta = 0.9",
                                                          "Tilt: delta = 0.5",
-                                                         "Trimmed TSMs")))
+                                                         "Smooth trimmed TSMs")))
 
 est_noint <- readRDS("../output/estimates_noint.RDS")
 est_noint <- est_noint$res$est[1]
@@ -53,12 +53,13 @@ anonymized_id <- ny_data_top10 %>% select(PROVUSRD) %>% unique() %>%
 anonymized_id$anon_id <- as.roman(1:10)
 combined_data %<>% left_join(anonymized_id) %>% select(-PROVUSRD)
 
+combined_data %<>% filter(spec == "Smooth trimmed TSMs")
+
 results_plot <-
   ggplot(data = combined_data, aes(x = reorder(as.character(anon_id), anon_id), y = est)) +
   geom_point() +
   geom_errorbar(aes(ymin = ci.ll, ymax = ci.ul)) +
   geom_hline(yintercept = est_noint, linetype = "dashed", color = "red") +
-  facet_wrap(~spec, ncol = 1) +
   theme_minimal() +
   theme(text = element_text(family = "serif")) +
   labs(x = "Anonymized provider ID", 
