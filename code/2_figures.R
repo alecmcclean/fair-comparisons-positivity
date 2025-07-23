@@ -66,7 +66,7 @@ results_plot <-
        y = "Point estimate with pointwise 95% confidence interval")
 
 ggsave(plot = results_plot, filename = "../figures/results.png",
-       width = 5, height = 5)
+       width = 5, height = 5, bg = "white")
 
 ################################
 ### Differences for trimmed TSMs
